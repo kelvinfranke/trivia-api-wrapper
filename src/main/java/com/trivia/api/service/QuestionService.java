@@ -1,6 +1,8 @@
 package com.trivia.api.service;
 
-import com.trivia.api.model.Question;
+import com.trivia.api.model.AnswerDTO;
+import com.trivia.api.model.QuestionDTO;
+import com.trivia.api.model.QuestionResultDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

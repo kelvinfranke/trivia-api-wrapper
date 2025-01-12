@@ -1,4 +1,4 @@
-package com.trivia.api.service;
+package com.trivia.api.model;
 
 import java.util.List;
 

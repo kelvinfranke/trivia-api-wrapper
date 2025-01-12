@@ -1,9 +1,8 @@
 package com.trivia.api.controller;
 
-import com.trivia.api.model.Question;
-import com.trivia.api.service.AnswerDTO;
-import com.trivia.api.service.QuestionDTO;
-import com.trivia.api.service.QuestionResultDTO;
+import com.trivia.api.model.AnswerDTO;
+import com.trivia.api.model.QuestionDTO;
+import com.trivia.api.model.QuestionResultDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.trivia.api.service.QuestionService;

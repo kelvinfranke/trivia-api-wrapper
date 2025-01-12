@@ -1,4 +1,4 @@
-package com.trivia.api.service;
+package com.trivia.api.model;
 
 public class QuestionResultDTO {
     private String question;

@@ -1,6 +1,8 @@
 package com.trivia.api.service;
 
-import com.trivia.api.model.Question;
+import com.trivia.api.model.AnswerDTO;
+import com.trivia.api.model.QuestionDTO;
+import com.trivia.api.model.QuestionResultDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -9,7 +11,6 @@ import java.util.*;
 @Service
 public class OpenTriviaDatabase {
     private final RestTemplate restTemplate;
-//    private Map<Integer, Question> currentQuestions;
     private Map<Integer, QuestionDTO> questionsDTO;
     private Map<Integer, AnswerDTO> correctAnswers;
 
@@ -23,7 +24,6 @@ public class OpenTriviaDatabase {
         String url = OPEN_TRIVIA_ENDPOINT + "?amount=" + amount;
         OpenTriviaResponse response = restTemplate.getForObject(url, OpenTriviaResponse.class);
 
-//        Map<Integer, Question> questions = new TreeMap<>();
         questionsDTO = new TreeMap<>();
         correctAnswers = new TreeMap<>();
         if (response != null) {
@@ -31,15 +31,6 @@ public class OpenTriviaDatabase {
             if (results != null) {
                 for (int i = 0; i < results.size(); i++) {
                     OpenTriviaValue value = results.get(i);
-                    // ----
-//                    Question question = new Question(
-//                            i,
-//                            value.getQuestion(),
-//                            value.getCorrectAnswer(),
-//                            value.getIncorrectAnswers().toArray(new String[0])
-//                    );
-//                    questions.put(i, question);
-                    // ----
                     String correctAnswer = value.getCorrectAnswer();
                     AnswerDTO correctAnswerMapping = new AnswerDTO(i, correctAnswer);
                     correctAnswers.put(i, correctAnswerMapping);
@@ -57,7 +48,6 @@ public class OpenTriviaDatabase {
                 }
             }
         }
-//        this.currentQuestions = questions;
         return questionsDTO;
     }
 
