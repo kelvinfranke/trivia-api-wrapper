@@ -1,7 +1,6 @@
 package com.trivia.api.service;
 
 import com.trivia.api.model.AnswerDTO;
-import com.trivia.api.model.QuestionDTO;
 import com.trivia.api.model.QuestionResultDTO;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,7 @@ public class QuestionService {
     }
 
 //    public List<Question> getQuestions(Integer amount) {
-    public Map<Integer, QuestionDTO> getQuestions(Integer amount) {
+    public OpenTriviaWrapperDTO getQuestions(Integer amount) {
         return openTriviaDatabase.fetchQuestions(amount);
     }
 

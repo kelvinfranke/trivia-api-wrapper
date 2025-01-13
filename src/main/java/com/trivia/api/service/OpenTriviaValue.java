@@ -1,10 +1,13 @@
 package com.trivia.api.service;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.List;
 
 public class OpenTriviaValue {
+
+    private String category;
+    private String type;
+    private String difficulty;
     private String question;
 
     @JsonProperty("correct_answer")
@@ -12,6 +15,30 @@ public class OpenTriviaValue {
 
     @JsonProperty("incorrect_answers")
     private List<String> incorrectAnswers;
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
+    }
 
     public String getQuestion() {
         return question;

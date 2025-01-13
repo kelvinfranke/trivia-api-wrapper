@@ -1,8 +1,8 @@
 package com.trivia.api.controller;
 
 import com.trivia.api.model.AnswerDTO;
-import com.trivia.api.model.QuestionDTO;
 import com.trivia.api.model.QuestionResultDTO;
+import com.trivia.api.service.OpenTriviaWrapperDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.trivia.api.service.QuestionService;
@@ -21,7 +21,7 @@ public class QuestionController {
     }
 
     @GetMapping("/questions")
-    public Map<Integer, QuestionDTO> getQuestions(@RequestParam Integer amount){
+    public OpenTriviaWrapperDTO getQuestions(@RequestParam Integer amount){
         return questionService.getQuestions(amount);
     }
 
