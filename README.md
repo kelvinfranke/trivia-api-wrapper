@@ -65,6 +65,15 @@ The frontend will start on `http://localhost:5173`
 - `GET /questions?amount={number}` - Get specified number of trivia questions
 - `POST /checkanswers` - Submit answers for checking
 
+## Structure of the Application (MVCS)
+- `QuestionController` - is simply responsible for communication between the service layer
+and the outside world.
+- `QuestionService` - is where the magic happens. The core logic of retrieving the questions and 
+checking the answers is located here. Furthermore, DTO's are prepared to be sent out.
+- `OpenTriviaClient` - acts as a client for the _OpenTriviaDatabase_ by being responsible for 
+actually fetching the questions.
+
+
 ## Technologies Used
 
 - Backend:
