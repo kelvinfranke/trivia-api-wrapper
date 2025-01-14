@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 function Start({ setQuestions, setScreen }) {
   const [numberOfQuestions, setNumberOfQuestions] = useState(0);
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   function decodeHtml(html) {
     var txt = document.createElement("textarea");
@@ -11,36 +13,45 @@ function Start({ setQuestions, setScreen }) {
   }
 
   function handleInputChange(event) {
-    setNumberOfQuestions(event.target.value);
+    setError('');
+    const value = parseInt(event.target.value);
+    if (value < 0) {
+      setError('Number of questions cannot be negative');
+    }
+    setNumberOfQuestions(value);
   }
 
   async function handleStart() {
-    if (numberOfQuestions > 0) {
-      try {
-        const response = await fetch(
-          `http://localhost:8080/questions?amount=${numberOfQuestions}`
-        );
-        const data = await response.json();
-        // const decodedData = data.results.map((item) => {
-        //   return {
-        //     ...item,
-        //     question: decodeHtml(item.question),
-        //     answers: item.answers.map((answer) => decodeHtml(answer))
-        //   };
-        // });
-        const decodedData = {
-          ...data,
-          results: data.results.map((item) => ({
-            ...item,
-            question: decodeHtml(item.question),
-            answers: item.answers.map((answer) => decodeHtml(answer)),
-          })),
-        };
-        setQuestions(decodedData);
-        setScreen("questions");
-      } catch (err) {
-        console.error(err);
+    setError('');
+    if (numberOfQuestions <= 0) {
+      setError('Please enter a valid number of questions');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        `http://localhost:8080/questions?amount=${numberOfQuestions}`
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error withs status: ${response.status}`);
       }
+      const data = await response.json();
+      const decodedData = {
+        ...data,
+        results: data.results.map((item) => ({
+          ...item,
+          question: decodeHtml(item.question),
+          answers: item.answers.map((answer) => decodeHtml(answer)),
+        })),
+      };
+      setQuestions(decodedData);
+      setScreen("questions");
+    } catch (err) {
+      console.error(err);
+      setError('Failed to fetch questions. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -53,10 +64,13 @@ function Start({ setQuestions, setScreen }) {
           value={numberOfQuestions}
           onChange={handleInputChange}
           type="number"
+          min="1"
+          disabled={isLoading}
         />
       </label>
-      <button onClick={handleStart}>
-        Start
+      {error && <p className="error-message" style={{ color: 'red' }}>{error}</p>}
+      <button onClick={handleStart} disabled={isLoading || numberOfQuestions <= 0 || !numberOfQuestions}>
+        {isLoading ? 'Loading...' : 'Start'}
       </button>
     </div>
   );

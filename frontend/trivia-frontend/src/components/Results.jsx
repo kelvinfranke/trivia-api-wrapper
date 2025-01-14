@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 function Results({ results }) {
     const keys = Object.keys(results);
   
-    const totalCorrect = keys.filter((key) => results[key].isCorrect).length;
+    const totalCorrect = keys.filter((key) => results[key]?.isCorrect).length;
   
     function decodeHtml(html) {
         var txt = document.createElement("textarea");
@@ -18,7 +18,19 @@ function Results({ results }) {
         </h2>
         
         {keys.map((id) => {
-          const { question, isCorrect, correctAnswer } = results[id];
+          const result = results[id] || {};
+          const { question, isCorrect, correctAnswer } = result;
+          
+          if (!question || !correctAnswer) {
+            return (
+              <div className="result-item error" key={id}>
+                <p className="error-message" style={{ color: 'red' }}>
+                  Error: Missing data for this question
+                </p>
+              </div>
+            );
+          }
+
           return (
             <div className="result-item" key={id}>
               <h3>{decodeHtml(question)}</h3>
@@ -34,11 +46,10 @@ function Results({ results }) {
         })}
       </div>
     );
-  }
+}
 
-  Results.propTypes = {
+Results.propTypes = {
     results: PropTypes.object.isRequired
-  };
+};
   
-  export default Results;
-  
+export default Results;

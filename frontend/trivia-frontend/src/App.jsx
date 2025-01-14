@@ -29,6 +29,7 @@ function App() {
       {screen === "finish" && (
         <ResultPage
           answers={answers}
+          setScreen={setScreen}
         />
       )}
     </>

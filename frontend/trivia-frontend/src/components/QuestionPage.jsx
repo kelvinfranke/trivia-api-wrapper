@@ -4,18 +4,26 @@ import PropTypes from 'prop-types';
 function QuestionPage({ questions, setAnswers, setScreen }) {
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0);
   const [localAnswers, setLocalAnswers] = useState({});
-  const [selectedAnswerIdx, setSelectedAnswerIdx] = useState(null)
+  const [selectedAnswerIdx, setSelectedAnswerIdx] = useState(null);
+  const [error, setError] = useState('');
 
-  if (!questions || !questions.results) {
-    return <div>Loading</div>;
+  if (!questions || !questions.results || !Array.isArray(questions.results) || questions.results.length === 0) {
+    return (
+      <div className="error-container">
+        <p>Error: No questions available</p>
+        <button onClick={() => setScreen('start')}>Back to Start</button>
+      </div>
+    );
   }
 
   const currentQuestion = questions.results[currentQuestionIdx];
-
-  function decodeHtml(html) {
-    var txt = document.createElement("textarea");
-    txt.innerHTML = html;
-    return txt.value;
+  if (!currentQuestion || !currentQuestion.answers) {
+    return (
+      <div className="error-container">
+        <p>Error: Question data is not correct. Did something go wrong with fetching?</p>
+        <button onClick={() => setScreen('start')}>Back to Start</button>
+      </div>
+    );
   }
 
   const handleAnswerClick = (questionId, answer, answerIdx) => {
@@ -41,11 +49,12 @@ function QuestionPage({ questions, setAnswers, setScreen }) {
   }
 
   const handleFinish = () => {
+    setError('');
     const totalQuestions = questions.results.length;
     const answeredQuestions = Object.keys(localAnswers).length;
 
     if (answeredQuestions < totalQuestions) {
-      alert('Please answer all questions before finishing.');
+      setError(`Please answer all questions before finishing. ${answeredQuestions}/${totalQuestions} answered.`);
       return;
     }
     setAnswers(localAnswers);
@@ -54,7 +63,9 @@ function QuestionPage({ questions, setAnswers, setScreen }) {
 
   return (
     <div className="question-section">
-      {/* <h3 className="question-text">{decodeHtml(currentQuestion.question)}</h3> */}
+      <div className="progress-indicator">
+        Question {currentQuestionIdx + 1} of {questions.results.length}
+      </div>
       <h3 className="question-text">{currentQuestion.question}</h3>
       <ul className="answers">
         {currentQuestion.answers.map((answer, i) => (
@@ -63,12 +74,12 @@ function QuestionPage({ questions, setAnswers, setScreen }) {
             className={selectedAnswerIdx === i ? "answer selected-answer" : "answer"}
             key={i}
           >{answer}</li>
-          // >{decodeHtml(answer)}</li>
         ))}
       </ul>
+      {error && <p className="error-message" style={{ color: 'red' }}>{error}</p>}
       <div className="buttons">
-        <button className="btn" onClick={goToPreviousQuestion} disabled={currentQuestionIdx == 0}>Previous</button>
-        <button className="btn" onClick={goToNextQuestion} hidden={currentQuestionIdx == questions.results.length - 1}>Next</button>
+        <button className="btn" onClick={goToPreviousQuestion} disabled={currentQuestionIdx === 0}>Previous</button>
+        <button className="btn" onClick={goToNextQuestion} hidden={currentQuestionIdx === questions.results.length - 1}>Next</button>
         <button className="btn" onClick={handleFinish} hidden={currentQuestionIdx < questions.results.length - 1}>Finish</button>
       </div>
     </div>

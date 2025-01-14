@@ -2,7 +2,6 @@ package com.trivia.api.service;
 
 import com.trivia.api.exception.TriviaApiException;
 import com.trivia.api.model.AnswerDTO;
-import com.trivia.api.model.QuestionDTO;
 import com.trivia.api.model.QuestionResultDTO;
 import com.trivia.api.service.OpenTriviaResponse;
 import com.trivia.api.service.OpenTriviaValue;
@@ -14,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
